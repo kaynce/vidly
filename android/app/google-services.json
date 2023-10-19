@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "457503765928",
+    "project_id": "vidly-4ffa5",
+    "storage_bucket": "vidly-4ffa5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:457503765928:android:82c64e974855827633599d",
+        "android_client_info": {
+          "package_name": "com.example.vidly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBokeZtPD-49EMWYWvHHxPmVO9CcMNSphg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
