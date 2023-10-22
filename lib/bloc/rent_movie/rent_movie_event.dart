@@ -7,6 +7,9 @@ sealed class RentMovieEvent extends Equatable {
   List<Object> get props => [];
 }
 
+final class FetchRentedMovies extends RentMovieEvent {
+  const FetchRentedMovies();
+}
 final class AddRentMovie extends RentMovieEvent {
   final List<RentMovie> rentMovies;
 

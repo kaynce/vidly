@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:vidly/bloc/movie/movie_bloc.dart';
 import 'package:vidly/bloc/rent_movie/rent_movie_bloc.dart';
+import 'package:vidly/class/drawer.dart';
+import 'package:vidly/class/user_email.dart';
 import 'package:vidly/model/movie_model.dart';
 import 'package:vidly/model/rent_movie.dart';
 
@@ -267,7 +269,7 @@ class _HomeViewState extends State<HomeView> {
 
                 if (actionType == "Add") {
                   _clearFormFields();
-                   //BlocProvider.of<MovieBloc>(context).add(AddMovie(newMovie));
+                  //BlocProvider.of<MovieBloc>(context).add(AddMovie(newMovie));
                   context.read<MovieBloc>().add(AddMovie(newMovie));
                 } else {
                   //BlocProvider.of<MovieBloc>(context).add(UpdateMovie(docId, newMovie));
@@ -337,91 +339,92 @@ class _HomeViewState extends State<HomeView> {
     priceController.clear();
   }
 
+  UserEmail userEmail = UserEmail();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Movies'),
-      ),
+      appBar: CustomAppBar(title: 'Movies'),
+      drawer: CustomDrawer(),
       body: Column(
         children: [
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             child: Wrap(
               spacing: 10,
               children: [
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: 10), // Adjust the margin as needed
-                  child: OutlinedButton(
-                    onPressed: () {
-                      _showRentMovie(context, selectedItems);
-                    },
-                    child: Text('Rent'),
+                if (userEmail.email.toString() != "kleoabelido01@gmail.com")
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _showRentMovie(context, selectedItems);
+                      },
+                      child: const Text('Rent'),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: 10), // Adjust the margin as needed
-                  child: OutlinedButton(
-                    onPressed: () {
-                      _showAddMovieDialog(context, 'Add');
-                    },
-                    child: Text('Add Movie'),
+                if (userEmail.email.toString() == "kleoabelido01@gmail.com")
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        _showAddMovieDialog(context, 'Add');
+                      },
+                      child: const Text('Add Movie'),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: 10), // Adjust the margin as needed
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      if (selectedItems.isNotEmpty) {
-                        // Assuming selectedItems contains only one item (the selected movie)
-                        final selectedMovieId = selectedItems.first;
+                if (userEmail.email.toString() == "kleoabelido01@gmail.com")
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: OutlinedButton(
+                      onPressed: () async {
+                        if (selectedItems.isNotEmpty) {
+                          //Get the first element
+                          final selectedMovieId = selectedItems.first.docId;
+                            
+                          final movieSnapshot = await FirebaseFirestore.instance
+                              .collection('tblMovie')
+                              .doc(selectedMovieId.toString())
+                              .get();
 
-                        final movieSnapshot = await FirebaseFirestore.instance
-                            .collection(
-                                'tblMovie') // Use the correct collection name ('tblMovie')
-                            .doc(selectedMovieId.toString())
-                            .get();
+                          if (movieSnapshot.exists) {
+                            final movieData =
+                                movieSnapshot.data() as Map<String, dynamic>;
 
-                        if (movieSnapshot.exists) {
-                          final movieData =
-                              movieSnapshot.data() as Map<String, dynamic>;
+                            final selectedMovie = Movie(
+                              docId: selectedMovieId.toString(),
+                              strTitle: movieData['strTitle'],
+                              strDescription: movieData['strDescription'],
+                              intDuration: movieData['intDuration'],
+                              dtmReleaseDate:
+                                  movieData['dtmReleaseDate'].toDate(),
+                              dblPrice: movieData['dblPrice']?.toDouble(),
+                            );
 
-                          final selectedMovie = Movie(
-                            docId: selectedMovieId.toString(),
-                            strTitle: movieData['strTitle'],
-                            strDescription: movieData['strDescription'],
-                            intDuration: movieData['intDuration'],
-                            dtmReleaseDate:
-                                movieData['dtmReleaseDate'].toDate(),
-                            dblPrice: movieData['dblPrice']?.toDouble(),
-                          );
-
-                          _setFormFieldsWithMovieData(selectedMovie);
-                          _showAddMovieDialog(context, 'Update');
+                            _setFormFieldsWithMovieData(selectedMovie);
+                            _showAddMovieDialog(context, 'Update');
+                          }
                         }
-                      }
-                    },
-                    child: Text('Update Movie'),
+                      },
+                      child: Text('Update Movie'),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: 10), // Adjust the margin as needed
-                  child: OutlinedButton(
-                    onPressed: () {
-                      if (selectedItems.isNotEmpty) {
-                        Set<String> docIds = selectedItems
-                            .map((movie) => movie.docId.toString())
-                            .toSet();
-                        _removeMovie(docIds);
-                      }
-                    },
-                    child: Text('Remove Movie'),
+                if (userEmail.email.toString() == "kleoabelido01@gmail.com")
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: 10), // Adjust the margin as needed
+                    child: OutlinedButton(
+                      onPressed: () {
+                        if (selectedItems.isNotEmpty) {
+                          Set<String> docIds = selectedItems
+                              .map((movie) => movie.docId.toString())
+                              .toSet();
+                          _removeMovie(docIds);
+                        }
+                      },
+                      child: Text('Remove Movie'),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

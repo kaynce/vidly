@@ -15,6 +15,17 @@ class Movie {
       this.intDuration,
       this.dtmReleaseDate,
       this.dblPrice});
+
+  factory Movie.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc) {
+    return Movie(
+      docId: doc.id,
+      strTitle: doc['strTitle'] as String?,
+      strDescription: doc['strDescription'] as String?,
+      intDuration: doc['intDuration'] as int?,
+      dtmReleaseDate: (doc['dtmReleaseDate'] as Timestamp?)?.toDate(),
+      dblPrice: (doc['dblPrice']),
+    );
+  }
 }
 
 class MovieService {

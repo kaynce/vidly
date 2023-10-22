@@ -3,11 +3,11 @@ part of 'movie_bloc.dart';
 @immutable
 sealed class MovieState {}
 
-class MovieInitial extends MovieState {}
+final class MovieInitial extends MovieState {}
 
-class MovieLoading extends MovieState {}
+final class MovieLoading extends MovieState {}
 
-class MovieLoaded extends MovieState {
+final class MovieLoaded extends MovieState {
   final List<Movie> movies;
   final Set<String> selectedItems;
 
@@ -17,14 +17,14 @@ class MovieLoaded extends MovieState {
   List<Object> get props => [movies, selectedItems];
 }
 
-class MovieError extends MovieState {
+final class MovieError extends MovieState {
   final String error;
 
   MovieError(this.error);
 }
 
 // State to track selected items
-class MovieSelectionState extends MovieState {
+final class MovieSelectionState extends MovieState {
   final Set<int> selectedItems;
 
   MovieSelectionState(this.selectedItems);

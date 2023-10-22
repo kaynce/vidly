@@ -6,6 +6,7 @@ import 'package:vidly/bloc/rent_movie/rent_movie_bloc.dart';
 import 'package:vidly/class/main.dart';
 import 'package:vidly/views/home_view.dart';
 import 'package:vidly/views/login_view.dart';
+import 'package:vidly/views/rented_movies_view.dart';
 
 void main() async {
    final mainBloc = MainBloc();
@@ -23,7 +24,7 @@ void main() async {
           create: (context) => RentMovieBloc(),
         ),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }
@@ -33,15 +34,27 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create a MaterialColor from the primary color
+    MaterialColor primarySwatch = MaterialColor(0xFF0E2D52, <int, Color>{
+      50: Color(0xFF0E2D52),
+      100: Color(0xFF0E2D52),
+      200: Color(0xFF0E2D52),
+      300: Color(0xFF0E2D52),
+      400: Color(0xFF0E2D52),
+      500: Color(0xFF0E2D52),
+      600: Color(0xFF0E2D52),
+      700: Color(0xFF0E2D52),
+      800: Color(0xFF0E2D52),
+      900: Color(0xFF0E2D52),
+    });
+
     return MaterialApp(
       title: 'Movies',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.deepPurple,
-        ).copyWith(secondary: Colors.deepPurpleAccent),
+        primarySwatch: primarySwatch,
         // You can also use 'primarySwatch' for your primary color.
       ),
-      home: const LoginView(),
+      home: const RentedMoviesView(),
     );
   }
 }
